@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Am creat o aplicatie care permite unuia sa adauge mai multe date despre un student
+ * 
  * @author Adrian
  *
  */
