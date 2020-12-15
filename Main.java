@@ -4,9 +4,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+
+
 
 public class Main {
 
+	/**
+	 * Se afiseaza toti studentii care participa la o disciplina.
+	 * @param array Lista de studenti.
+	 * @param disciplina Disciplina citita de la tastatura.
+	 */
+	
 	public static void ListaStudentilorInrolatiLaODisciplina(Student[] array, String disciplina) {
 		List<String> StudentiENGLEZA = new ArrayList<String>();
 		List<String> StudentiFRANCEZA = new ArrayList<String>();
@@ -65,6 +77,11 @@ public class Main {
 		}
 
 	}
+	
+	/**
+	 * Se afiseaza toti studentii care nu au platit taxa de studiu.
+	 * @param array Lista de studenti.
+	 */
 
 	public static void ListaStudentilorCareNuAuPlatitTaxaCursurilor(Student[] array) {
 		List<String> a = new ArrayList<String>();
@@ -93,6 +110,12 @@ public class Main {
 		System.out.println(a.toString());
 	}
 
+	/**
+	 * Se afiseaza toti studentii care nu au promovat la o disciplina.
+	 * @param array Lista de studenti.
+	 * @param disciplina Disciplina citita de la tastatura.
+	 */
+	
 	public static void ListaStudentilorCareNuAuPromovatLaODisciplina(Student[] array, String disciplina) {
 
 		List<String> StudentiENGLEZA = new ArrayList<String>();
@@ -149,7 +172,7 @@ public class Main {
 
 			if (key.equals(disciplina))
 
-				System.out.println("La cursul " + key + " participa urmatorii studenti: " + value.toString());
+				System.out.println("La cursul " + key + " nu au trecut urmatorii studenti: " + value.toString());
 
 		}
 	}
@@ -185,12 +208,11 @@ public class Main {
 
 		System.out.println("=====Cerinte=====");
 
-		System.out.println("Cursul la care vreti sa aflati studentii care participa: ");
+		//System.out.println("Cursul la care vreti sa aflati studentii care participa: ");
 
-		in.next();
 		String curs = in.nextLine();
 
-		ListaStudentilorInrolatiLaODisciplina(array, curs);
+		//ListaStudentilorInrolatiLaODisciplina(array, curs);
 
 		ListaStudentilorCareNuAuPlatitTaxaCursurilor(array);
 		
@@ -202,6 +224,26 @@ public class Main {
 
 		String curs1 = in.nextLine();
 		ListaStudentilorCareNuAuPromovatLaODisciplina(array,curs1);
+		
+		
+		
+		
+				
+		
+		
+		
+		try {
+		      BufferedWriter fisier = new BufferedWriter(new FileWriter("output.txt"));
+	
+		      for (int i = 0; i < NR; i++)
+		    	  fisier.write(array[i].toString()+"\n");		      
+		      
+		      fisier.close();
+		    } catch (IOException e) {
+		      System.out.println("A aparut o eroare");
+		      e.printStackTrace();
+		    }
+		
 
 	}
 }
