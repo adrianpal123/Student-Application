@@ -6,10 +6,28 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 
+ * Aplicatia actioneaza ca o baza de date, se va cere adaugarea unui numar de studenti. Adaugand ulterior informatii despre fiecare, pentru a prezenta o analiza a studentilor inscrisi.
  * @author Adrian
  *
  */
+
+
+/*
+ * La fiecare Student se cere:
+ * -Numele, Prenumele.
+ * -Fiecarui student i se genereaza un unic Student ID.
+ * -Anul in care este (I-IV)
+ * -cursuri la care doriti sa inrolati studentul. 
+ * Cursurile sunt urmatoarele: (ENGLEZA,FRANCEZA,SPANIOLA,ROMANA,MATEMATICA,INFORMATICA,FIZICA,CHIMIE,ISTORIE,GEOGRAFIE), Studentul poate fi inrolat la unul sau mai multe cursuri. Se va apasa "Q" pentru a termina.
+ * Studentul trebuie sa aiba peste 5 la fiecare materie la care este inrolat pentru a putea absolvi.
+ * Fiecare curs costa 500 de lei. Studentul trebuie sa plateasca in totalitate taxele pentru a absolvi.
+ * -Numarul total de prezente. 
+ * Studentul trebuie sa aiba un numar de 7 prezente pentru a putea absolvi, el dispune de o reducere a numarului de ore daca lucreaza (-3 prezente obligatorii).
+ *
+ */
+
+
+
 public class Student {
 
 	private int studentId;
@@ -26,6 +44,7 @@ public class Student {
 	private static int COSTCURS=500;
 	private boolean medieMica=false;
 	private List<String> listaCursuri=new ArrayList<String>();
+
 
 	Student()
 	{
@@ -68,10 +87,52 @@ public class Student {
 		
 		
 		System.out.println("Numarul de prezente");
-		this.numarPrezente=cin.nextInt();
 		
+		boolean isnumb=false;
+		do
+		{
+		if (cin.hasNextInt()) {
+			this.numarPrezente=cin.nextInt();
+			if (this.numarPrezente > 0 && this.numarPrezente <= this.listaCursuri.size()*10)
+			{
+			isnumb=true;
+			}
+			else
+			{
+				System.out.println("numarul de prezente poate sa fie intre intervalul 0 - " + this.listaCursuri.size()*10);
+				isnumb=false;
+			}
+			
+			
+		}
+		else
+		{
+			System.out.println("Alegeti un an intre 0- " + this.listaCursuri.size()*10);
+			isnumb=false;
+			cin.next();
+		}
+			
+		}while (isnumb==false);
+				
 		System.out.println("Studentul este sau nu angajat: true-DA / false-NU ");
-		this.Angajat=cin.nextBoolean();
+
+		boolean isnumber1=false;
+		do
+		{
+		if (cin.hasNextBoolean()) {
+			this.Angajat=cin.nextBoolean();
+			isnumber1=true;
+			
+		}
+		else
+		{
+			System.out.println("Afisati true pentru a sugera ca studentul lucreaza, false altfel");
+			isnumber1=false;
+			cin.next();
+		}
+			
+		}while (isnumber1==false);
+		
 		checkAngajat();
 		
 		platireaTaxei();
@@ -106,7 +167,7 @@ public class Student {
 	public void CreateCursuriForStudent()
 	{
 		Cursuri c=null;
-		
+		int sum;
 		do {
 			System.out.print("Cursul la care doriti sa inscrieti studentul (Q to quit): ");
 			Scanner in = new Scanner(System.in);
@@ -134,13 +195,14 @@ public class Student {
 				int aDouaNota=in.nextInt();
 				System.out.println("A treia nota la materia "+ c);
 				int aTreiaNota=in.nextInt();
+				note.clear();
 				note.add(primaNota);
 				note.add(aDouaNota);
 				note.add(aTreiaNota);
 				
 				map.put(c,note);
 				
-				int sum=0;
+				sum=0;
 				sum=mediaDupaMaterie(map,c);
 				
 				System.out.println("Media la materia " + c + " este " + sum/3);
@@ -158,7 +220,7 @@ public class Student {
 			{
 				if (!course.equals("Q"))
 				{
-				System.out.println("Nu exista aceasta materie, incercati sa inrolati studentul in una dintre urmatoarele materii:\nENGLEZA,\r\n"
+				System.out.println("Nu exista aceasta materie, incercati sa inrolati studentul la una dintre urmatoarele materii:\nENGLEZA,\r\n"
 						+ "FRANCEZA,\r\n"
 						+ "SPANIOLA,\r\n"
 						+ "ROMANA,\r\n"
@@ -184,8 +246,8 @@ public class Student {
 	
 	public int mediaDupaMaterie(Map<Cursuri,List<Integer>> map, Cursuri course)
 	{
-		int sum=0;
-		for (Map.Entry<Cursuri, List<Integer>> entry:map.entrySet())
+		int sum1=0;
+	/*	for (Map.Entry<Cursuri, List<Integer>> entry:map.entrySet())
 			
 		{
 			
@@ -201,9 +263,12 @@ public class Student {
 					}
 		}
 		}
+		*/
+
+	for(int nota:map.get(course))
+					sum1+=nota;
 		
-		
-		return sum;
+		return sum1;
 		
 		
 	}
@@ -217,9 +282,35 @@ public class Student {
 		verificareSold();
 		System.out.print("Suma pe care studentul o plateste in lei");
 		Scanner in = new Scanner(System.in);
-		int payment = in.nextInt();
-		this.sold -= payment;
-		System.out.println("Multumim pentru suma de: " + payment + " lei");
+		boolean isnumber=false;
+		do
+		{
+		if (in.hasNextInt()) {
+			int payment = in.nextInt();
+			if (payment<=COSTCURS*listaCursuri.size())
+			{
+			isnumber=true;
+			this.sold -= payment;
+			System.out.println("Multumim pentru suma de: " + payment + " lei");
+			
+			}
+			else
+			{
+				System.out.println("Nu se poate plati mai mult decat " + COSTCURS*listaCursuri.size() + " lei, pentru donatii contactati secretariatul. \n Alegeti o suma intre 0 -" + COSTCURS*listaCursuri.size());
+				isnumber=false;
+			}
+			
+			
+		}
+		else
+		{
+			System.out.println("Alegeti o suma intre 0 - " + COSTCURS*listaCursuri.size());
+			isnumber=false;
+			in.next();
+		}
+			
+		}while (isnumber==false);
+		
 		verificareSold();
 	}
 	
@@ -293,6 +384,10 @@ public class Student {
 		return studentId;
 	}
 
+	/**
+	 * 
+	 * @param studentId Fiecare student primeste un random student ID.
+	 */
 	public void setStudentId(int studentId) {
 		this.studentId = studentId;
 	}
@@ -301,6 +396,10 @@ public class Student {
 		return prenume;
 	}
 
+	/**
+	 * 
+	 * @param prenume Prenumele studentului.
+	 */
 	public void setPrenume(String prenume) {
 		this.prenume = prenume;
 	}
@@ -309,6 +408,11 @@ public class Student {
 		return nume;
 	}
 
+	/**
+	 * 
+	 * @param nume Numele studentului.
+	 */
+	
 	public void setNume(String nume) {
 		this.nume = nume;
 	}
@@ -317,6 +421,11 @@ public class Student {
 		return grade;
 	}
 
+	/**
+	 * 
+	 * @param grade Nota studentului la o materie.
+	 */
+	
 	public void setGrade(int grade) {
 		this.grade = grade;
 	}
@@ -325,6 +434,10 @@ public class Student {
 		return cursuri;
 	}
 
+	/**
+	 * 
+	 * @param cursuri Multimea de cursuri la care este inrolat studentul.
+	 */
 	public void setCursuri(Cursuri cursuri) {
 		this.cursuri = cursuri;
 	}
@@ -365,6 +478,10 @@ public class Student {
 		return numarPrezente;
 	}
 
+	/**
+	 * 
+	 * @param numarPrezente Numarul total de prezente.
+	 */
 	public void setNumarPrezente(int numarPrezente) {
 		this.numarPrezente = numarPrezente;
 	}
@@ -373,6 +490,11 @@ public class Student {
 		return sold;
 	}
 
+	/**
+	 * 
+	 * @param Soldul curent
+	 */
+	
 	public void setSold(int sold) {
 		this.sold = sold;
 	}
@@ -381,6 +503,10 @@ public class Student {
 		return COSTCURS;
 	}
 
+	/**
+	 * 
+	 * @param cOSTCURS Costul unui curs.
+	 */
 	public static void setCOSTCURS(int cOSTCURS) {
 		COSTCURS = cOSTCURS;
 	}
@@ -389,6 +515,11 @@ public class Student {
 		return medieMica;
 	}
 
+	/**
+	 * 
+	 * @param medieMica Daca media este mica (media<5), ea se va stoca aici.
+	 */
+	
 	public void setMedieMica(boolean medieMica) {
 		this.medieMica = medieMica;
 	}
